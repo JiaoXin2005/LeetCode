@@ -10,7 +10,7 @@
  * @param {number[]} nums
  * @return {number}
  */
-var minSubArrayLen = function(target, nums) {
+var minSubArrayLen = function (target, nums) {
   let sum = 0;
   let left = 0;
   let right = 0;

@@ -17,13 +17,13 @@
  * @param {ListNode} head
  * @return {boolean}
  */
-var hasCycle = function(head) {
-  let p1 = head;
-  let p2 = head;
-  while (p1 && p2 && p2.next) {
-    p1 = p1.next;
-    p2 = p2.next.next;
-    if (p1 === p2) {
+var hasCycle = function (head) {
+  let left = head;
+  let right = head;
+  while (right.next && left && right) {
+    left = left.next;
+    right = left.next.next;
+    if (left === right) {
       return true;
     }
   }
