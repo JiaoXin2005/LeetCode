@@ -22,19 +22,24 @@
 var serialize = function(root) {
   if (!root) return "";
   let strArr = [];
-  const dfs = (node) => {
-    if (!node) {
+  let nodes = [root];
+
+  while (nodes.length) {
+    let cur = nodes.shift();
+
+    if (!cur) {
       strArr.push("#");
-      return;
+      continue;
     }
-    dfs(node.left);
-    dfs(node.right);
-    strArr.push(node.val);
-  };
 
-  dfs(root);
+    strArr.push(cur.val);
 
-  return strArr.join(",");
+    nodes.push(cur.left);
+    nodes.push(cur.right);
+  }
+
+  let str = strArr.join(",");
+  return str;
 };
 
 /**
@@ -46,19 +51,33 @@ var serialize = function(root) {
 var deserialize = function(data) {
   if (!data) return null;
   let strArr = data.split(",");
+  let rootVal = strArr[0];
+  let root = new TreeNode(+rootVal);
+  let queue = [root];
 
-  const dfs = (strArr) => {
-    if (!strArr) return null;
-    let nodeVal = strArr.pop();
-    if (nodeVal === "#") return null;
-    let node = new TreeNode(+nodeVal);
+  for (let i = 1; i < strArr.length; ) {
+    let parent = queue.shift();
 
-    node.right = dfs(strArr);
-    node.left = dfs(strArr);
-    return node;
-  };
+    let left = strArr[i++];
+    if (left === "#") {
+      parent.left = null;
+    } else {
+      let leftNode = new TreeNode(+left);
+      parent.left = leftNode;
+      queue.push(parent.left);
+    }
 
-  return dfs(strArr);
+    let right = strArr[i++];
+    if (right === "#") {
+      parent.right = null;
+    } else {
+      let rightNode = new TreeNode(+right);
+      parent.right = rightNode;
+      queue.push(parent.right);
+    }
+  }
+
+  return root;
 };
 
 /**
